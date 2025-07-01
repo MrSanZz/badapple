@@ -3,9 +3,10 @@ from PIL import Image
 import numpy as np
 import os
 import time
+import sys
 
 # Karakter ASCII berdasarkan kecerahan
-ASCII_CHARS = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", "."]
+ASCII_CHARS = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", " ", "'", "|", "!", "&", "-", "="]
 
 def frame_to_ascii(frame, new_width=100):
     # Resize frame dengan ukuran tetap
@@ -26,7 +27,7 @@ def frame_to_ascii(frame, new_width=100):
 
 def display_ascii_video(video_path):
     cap = cv2.VideoCapture(video_path)
-    target_fps = 40  # Set target FPS
+    target_fps = 60  # Set target FPS
     frame_duration = 1 / target_fps  # Durasi ideal per frame
 
     # Tetapkan ukuran ASCII tetap
@@ -50,12 +51,13 @@ def display_ascii_video(video_path):
         ascii_frame = frame_to_ascii(frame, new_width=fixed_size[0])
 
         # Bersihkan layar dan tampilkan ASCII art
-        os.system("cls" if os.name == "nt" else "clear")
-        print(ascii_frame)
+        #os.system("cls" if os.name == "nt" else "clear")
+        sys.stdout.write(ascii_frame)
+        sys.stdout.flush()
 
         # Hitung waktu yang digunakan dan sesuaikan jeda
         elapsed_time = time.time() - start_time
-        sleep_time = max(0, frame_duration - elapsed_time)
+        sleep_time = max(0.0078, frame_duration - elapsed_time)
         time.sleep(sleep_time)
 
     cap.release()
